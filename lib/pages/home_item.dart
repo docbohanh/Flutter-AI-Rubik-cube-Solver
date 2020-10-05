@@ -25,7 +25,7 @@ class HomeItem extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return StreamBuilder<Map>(
-      stream: viewModel.rubikColorCodeStream,
+      stream: viewModel.colorCodeStream,
       builder: (ctx, snapshot) {
         var code = viewModel.getCode(side);
 

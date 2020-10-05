@@ -287,28 +287,33 @@ class _HomePage extends State<HomePage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
-        padding: EdgeInsets.only(bottom: 10),
-        height: 72,
-        width: 72,
-        child: FloatingActionButton(
-          tooltip: "Kociemba Rubik's Cube Solver",
+      floatingActionButton: StreamBuilder(
+        stream: viewModel.colorCodeStream,
+        builder: (ctx, sn) {
+          return viewModel.isValid ? Container(
+            padding: EdgeInsets.only(bottom: 10),
+            height: 72,
+            width: 72,
+            child: FloatingActionButton(
+              tooltip: "Kociemba Rubik's Cube Solver",
 //          backgroundColor: Colors.indigo,
-          child: StreamBuilder<bool>(
-            stream: viewModel.solving.stream,
-            initialData: false,
-            builder: (ctx, snapshot) {
-              if (snapshot.data) {
-                return Container(
-                  height: 54,
-                  child: rubikLoading(),
-                );
-              }
-              return Text("Solve", style: TextStyle(fontSize: 14));
-            },
-          ),
-          onPressed: _solveCube,
-        ),
+              child: StreamBuilder<bool>(
+                stream: viewModel.solving.stream,
+                initialData: false,
+                builder: (ctx, snapshot) {
+                  if (snapshot.data) {
+                    return Container(
+                      height: 54,
+                      child: rubikLoading(),
+                    );
+                  }
+                  return Text("Solve", style: TextStyle(fontSize: 14));
+                },
+              ),
+              onPressed: _solveCube,
+            ),
+          ) : SizedBox();
+        },
       ),
     );
   }
@@ -684,6 +689,7 @@ class _HomePage extends State<HomePage> {
           content: new Text('Wrong color pattern, Try again...'),
         ));
       } else {
+        viewModel.rotationsChanged(solver.rotations);
         openSolvePage(solver.rotations);
       }
     } catch (e) {

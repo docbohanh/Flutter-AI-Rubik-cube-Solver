@@ -26,15 +26,15 @@ class HomeViewModel {
   Function(List) get rotationsChanged => _rotations.sink.add;
 
   final _rubikColorCode = BehaviorSubject<Map>();
-  Stream<Map> get rubikColorCodeStream => _rubikColorCode.stream;
-  Function(Map) get rubikColorCodeChanged => _rubikColorCode.sink.add;
+  Stream<Map> get colorCodeStream => _rubikColorCode.stream;
+  Function(Map) get colorCodeChanged => _rubikColorCode.sink.add;
   Map get rubikColorCode => _rubikColorCode.value;
 
   HomeViewModel() {
     rotationsChanged([]);
     _algorithm.sink.add('Kociemba');
 
-    rubikColorCodeStream.listen((code) {
+    colorCodeStream.listen((code) {
       rotationsChanged([]);
       logger.info('Color code: $code');
     });
@@ -43,7 +43,7 @@ class HomeViewModel {
   }
 
   void initial() async {
-    rubikColorCodeChanged({
+    colorCodeChanged({
       "top": r'oyorywwgg',
       "left": r'wgrwbybwo',
       "front": r'borbrobob',
@@ -56,7 +56,7 @@ class HomeViewModel {
   }
 
   void resetAll() {
-    rubikColorCodeChanged({});
+    colorCodeChanged({});
   }
 
   void scramble() {
@@ -66,13 +66,13 @@ class HomeViewModel {
   void resetSide(String side) {
     var map = rubikColorCode;
     map[side.toLowerCase()] = '';
-    rubikColorCodeChanged(map);
+    colorCodeChanged(map);
   }
 
   void setCode(String side, {String code}) {
     var map = rubikColorCode;
     map[side.toLowerCase()] = code;
-    rubikColorCodeChanged(map);
+    colorCodeChanged(map);
   }
 
   bool checkColor(String side, {String code}) {
@@ -96,6 +96,7 @@ class HomeViewModel {
 
   String get kociembaCode {
     var map = rubikColorCode;
+    if (map.keys.isEmpty) return '';
     return map["top"] +
         map["left"] +
         map["front"] +
