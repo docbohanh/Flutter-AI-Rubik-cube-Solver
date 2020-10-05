@@ -23,13 +23,12 @@ class HomeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var stream = viewModel.getStream(side);
-    if (stream == null) return SizedBox();
 
-    return StreamBuilder<String>(
-      stream: stream,
+    return StreamBuilder<Map>(
+      stream: viewModel.rubikColorCodeStream,
       builder: (ctx, snapshot) {
-        var code = snapshot.data ?? '';
+        var code = viewModel.getCode(side);
+
         Widget widget = SizedBox();
         if (code.length == 9) {
           widget = code.colorContainer;

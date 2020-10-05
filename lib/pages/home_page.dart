@@ -29,7 +29,8 @@ class _HomePage extends State<HomePage> {
 
   final _allSide = ['Top', 'Left', 'Front', 'Right', 'Back', 'Bottom'];
 
-  final filterColorCode = FilteringTextInputFormatter.allow(RegExp(r'[ybrgow]'));
+  final filterColorCode =
+      FilteringTextInputFormatter.allow(RegExp(r'[ybrgow]'));
 
   @override
   void initState() {
@@ -38,8 +39,6 @@ class _HomePage extends State<HomePage> {
     _dio.options.connectTimeout = 60000;
     _dio.options.receiveTimeout = 60000;
     super.initState();
-
-    viewModel.rotationsStream.skip(1).listen((r) => openSolvePage(r));
   }
 
   @override
@@ -106,7 +105,7 @@ class _HomePage extends State<HomePage> {
       var style = TextStyle(fontSize: 14, color: Colors.white);
       menu = PopupMenu(
           backgroundColor: Colors.blue,
-          lineColor: Colors.blueGrey,
+          lineColor: Colors.grey,
           maxColumn: 2,
           items: [
             MenuItem(
@@ -534,14 +533,26 @@ class _HomePage extends State<HomePage> {
             borderSide: BorderSide(width: 1, color: Colors.transparent),
           ),
           prefixText: side + ':  ',
+          suffix: FlatButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel', style: TextStyle(color: Colors.blue)),
+          )
         ),
       ),
     );
 
     var bold = TextStyle(
-        fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black54);
+      fontWeight: FontWeight.bold,
+      fontSize: 14,
+      color: Colors.black54,
+      fontFamily: 'Roboto',
+    );
     var normal = TextStyle(
-        fontWeight: FontWeight.normal, fontSize: 13, color: Colors.black54);
+      fontWeight: FontWeight.normal,
+      fontSize: 13,
+      color: Colors.black54,
+      fontFamily: 'Roboto',
+    );
 
     showModalBottomSheet(
       isScrollControlled: true,
@@ -628,6 +639,7 @@ class _HomePage extends State<HomePage> {
                     ),
                     child: textField,
                   ),
+                  SizedBox(height: 8),
                 ],
               ),
             ),
@@ -672,7 +684,7 @@ class _HomePage extends State<HomePage> {
           content: new Text('Wrong color pattern, Try again...'),
         ));
       } else {
-        viewModel.rotationsChanged(solver.rotations);
+        openSolvePage(solver.rotations);
       }
     } catch (e) {
       viewModel.solving.sink.add(false);
