@@ -531,18 +531,29 @@ class _HomePage extends State<HomePage> {
           Navigator.pop(context);
         },
         decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(4)),
-              borderSide: BorderSide(
-                width: 1,
-                color: Colors.transparent,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(4)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Colors.transparent,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(4)),
+            borderSide: BorderSide(width: 1, color: Colors.transparent),
+          ),
+          prefixText: side + ':  ',
+          suffix: InkWell(
+            onTap: () => Navigator.pop(context),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(
+                Icons.clear,
+                size: 20,
+                color: Colors.redAccent[700],
               ),
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(4)),
-              borderSide: BorderSide(width: 1, color: Colors.transparent),
-            ),
-            prefixText: side + ':  ',
+          ),
         ),
       ),
     );
@@ -578,20 +589,6 @@ class _HomePage extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      onTap: () => Navigator.pop(context),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.clear,
-                          size: 20,
-                          color: Colors.redAccent[700],
-                        ),
-                      ),
-                    ),
-                  ),
                   Container(
                     padding: EdgeInsets.all(15),
                     child: Image.asset('assets/kociemba.png'),
