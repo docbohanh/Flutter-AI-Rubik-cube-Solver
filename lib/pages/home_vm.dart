@@ -9,13 +9,6 @@ class HomeViewModel {
 
   final _rotations = BehaviorSubject<List>();
 
-  // final top = BehaviorSubject<String>();
-  // final left = BehaviorSubject<String>();
-  // final front = BehaviorSubject<String>();
-  // final right = BehaviorSubject<String>();
-  // final back = BehaviorSubject<String>();
-  // final bottom = BehaviorSubject<String>();
-
   final _algorithm = BehaviorSubject<String>();
 
   Stream<String> get algorithmStream => _algorithm.stream;
@@ -31,15 +24,6 @@ class HomeViewModel {
   List get rotations => _rotations.value;
   Stream<List> get rotationsStream => _rotations.stream;
   Function(List) get rotationsChanged => _rotations.sink.add;
-
-  // Stream<String> get colorCode => Rx.combineLatest6(
-  //   top.stream,
-  //   left.stream,
-  //   front.stream,
-  //   right.stream,
-  //   back.stream,
-  //   bottom.stream, (a, b, c, d, e, f) => a + b + c + d + e + f,
-  // );
 
   final _rubikColorCode = BehaviorSubject<Map>();
   Stream<Map> get rubikColorCodeStream => _rubikColorCode.stream;
@@ -58,7 +42,7 @@ class HomeViewModel {
     initial();
   }
 
-  void initial() {
+  void initial() async {
     rubikColorCodeChanged({
       "top": r'oyorywwgg',
       "left": r'wgrwbybwo',
@@ -67,6 +51,7 @@ class HomeViewModel {
       "back": r'grggorybr',
       "bottom": r'wwybwryog',
     });
+    await Future.delayed(Duration(milliseconds: 300));
     rotationsChanged(["U2", "R", "L2", "B'", "U", "F", "B'", "U", "R", "F2", "D2", "F", "D'", "L2", "D", "B2", "U'", "D2", "F2", "D2"]);
   }
 
