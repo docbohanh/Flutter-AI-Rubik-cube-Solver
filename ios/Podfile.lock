@@ -5,6 +5,8 @@ PODS:
     - TOCropViewController (~> 2.5.4)
   - image_picker (0.0.1):
     - Flutter
+  - printing (0.0.1):
+    - Flutter
   - TOCropViewController (2.5.5)
   - url_launcher (0.0.1):
     - Flutter
@@ -13,6 +15,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - printing (from `.symlinks/plugins/printing/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
 
 SPEC REPOS:
@@ -26,6 +29,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_cropper/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
+  printing:
+    :path: ".symlinks/plugins/printing/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
 
@@ -33,6 +38,7 @@ SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   image_cropper: c8f9b4157933c7bb965a66d1c5e6c8fd408c6eb4
   image_picker: 9c3312491f862b28d21ecd8fdf0ee14e601b3f09
+  printing: 5ec249946ebbd51cead5ed9b0b48113bb5141bcf
   TOCropViewController: da59f531f8ac8a94ef6d6c0fc34009350f9e8bfe
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 

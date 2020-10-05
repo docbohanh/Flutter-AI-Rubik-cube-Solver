@@ -105,6 +105,17 @@ class HomeViewModel {
         map["bottom"];
   }
 
+  String get kociembaString {
+    var map = rubikColorCode;
+    if (map.keys.isEmpty) return '';
+    return map["top"] + '-' +
+        map["left"] + '-' +
+        map["front"] + '-' +
+        map["right"] + '-' +
+        map["back"] + '-' +
+        map["bottom"];
+  }
+
   bool get isValid => kociembaCode.length == 54;
 
   void dispose() {

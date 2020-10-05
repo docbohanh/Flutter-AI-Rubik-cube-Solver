@@ -54,7 +54,7 @@ class _HomePage extends State<HomePage> {
       MaterialPageRoute(
         builder: (context) => SolverPage(
           rotations: rotations,
-          code: viewModel.kociembaCode,
+          code: viewModel.kociembaString,
         ),
         fullscreenDialog: true,
       ),

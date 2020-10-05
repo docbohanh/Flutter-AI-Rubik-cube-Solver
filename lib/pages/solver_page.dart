@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
+import 'package:rubikSolver/pages/helper.dart';
 
 class SolverPage extends StatefulWidget {
   final String code;
@@ -13,6 +17,18 @@ class SolverPage extends StatefulWidget {
 class _SolverPageState extends State<SolverPage> {
   final _scrollController = ScrollController();
 
+  pw.Document doc;
+
+  bool isMakingPDF = false;
+
+  Widget rubikLoading({double size = 40}) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Image.asset("assets/rubik_rotations.gif"),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,10 +37,10 @@ class _SolverPageState extends State<SolverPage> {
         title: Text("Kociemba ${widget.rotations.length} rotations"),
         actions: [
           IconButton(
-            onPressed: () {
-              // Share.shareFiles([]);
-            },
-            icon: Icon(Icons.launch, color: Colors.white),
+            onPressed: () => _makePDF(),
+            icon: isMakingPDF
+                ? rubikLoading(size: 36)
+                : Icon(Icons.picture_as_pdf, color: Colors.white),
           )
         ],
       ),
@@ -38,7 +54,7 @@ class _SolverPageState extends State<SolverPage> {
                 return <Widget>[
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) => tooltipView(),
+                      (BuildContext context, int index) => tooltipView(),
                       childCount: 1,
                     ),
                   ),
@@ -48,14 +64,15 @@ class _SolverPageState extends State<SolverPage> {
                     delegate: ContestTabHeader(
                       child: Container(
                         color: Colors.white,
+                        padding: const EdgeInsets.all(8.0),
                         child: Center(
                           child: Text(
                             '${widget.code}',
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
+                            style: TextStyle(fontSize: 13),
                           ),
                         ),
                       ),
-                      height: 40,
+                      height: 50,
                     ),
                   ),
                 ];
@@ -65,17 +82,25 @@ class _SolverPageState extends State<SolverPage> {
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
                 color: Colors.white,
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  physics: ScrollPhysics(),
-                  itemCount: widget.rotations.length,
-                  separatorBuilder: (BuildContext context, int index) => Divider(
-                    height: 2,
-                    color: Colors.black54,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      initialView(),
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: ScrollPhysics(),
+                        itemCount: widget.rotations.length,
+                        separatorBuilder: (BuildContext context, int index) =>
+                            Divider(
+                          height: 2,
+                          color: Colors.black54,
+                        ),
+                        itemBuilder: (BuildContext context, int index) {
+                          return rotation(index, widget.rotations[index]);
+                        },
+                      ),
+                    ],
                   ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return rotation(index, widget.rotations[index]);
-                  },
                 ),
               ),
             ),
@@ -162,6 +187,127 @@ class _SolverPageState extends State<SolverPage> {
         ],
       ),
     );
+  }
+
+  var index = 0;
+
+  void _makePDF() async {
+    logger.info('index $index');
+    if (!isMakingPDF) {
+      setState(() => isMakingPDF = true);
+    }
+
+    if (index > widget.rotations.length - 1) {
+      setState(() => isMakingPDF = false);
+      _sharePDF();
+    } else {
+      if (doc == null) {
+        doc = pw.Document();
+      }
+
+      if (index == 0) {
+        final imageProvider = AssetImage('assets/initial.png');
+        final image = await pdfImageFromImageProvider(
+          pdf: doc.document,
+          image: imageProvider,
+        );
+
+        doc.addPage(
+          pw.Page(
+            pageFormat: PdfPageFormat.a5,
+            build: (pw.Context context) {
+              return pw.Column(children: [
+                pw.SizedBox(height: 10),
+                pw.Container(
+                    child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.center,
+                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                  children: [
+                    pw.Text(
+                      "${widget.code}",
+                      maxLines: 3,
+                      style: pw.TextStyle(fontSize: 10),
+                    ),
+                    pw.Align(
+                      alignment: pw.Alignment.centerRight,
+                      child: pw.Padding(
+                        padding: const pw.EdgeInsets.all(8.0),
+                        child: pw.Text(
+                          "*2 - Turn two times",
+                          style: pw.TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ),
+                    pw.Text(
+                      "Initial view",
+                      style: pw.TextStyle(
+                        fontSize: 18,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
+                    ),
+                    pw.SizedBox(height: 12),
+                    pw.Image(image),
+                  ],
+                )),
+              ]); // Center
+            },
+          ),
+        );
+      }
+
+      var turn = widget.rotations[index];
+      var step = index + 1;
+      final imageProvider = AssetImage('assets/$turn.png');
+      final image = await pdfImageFromImageProvider(
+        pdf: doc.document,
+        image: imageProvider,
+      );
+
+      doc.addPage(
+        pw.Page(
+          pageFormat: PdfPageFormat.a5,
+          build: (pw.Context context) {
+            return pw.Center(
+                child: pw.Container(
+              width: 500,
+              height: 500,
+              child: pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.center,
+                mainAxisAlignment: pw.MainAxisAlignment.center,
+                children: [
+                  pw.Text(
+                    "Step $step: $turn",
+                    style: pw.TextStyle(
+                      fontSize: 18,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
+                  ),
+                  pw.SizedBox(
+                    height: 12,
+                  ),
+                  pw.Container(width: 500, height: 500, child: pw.Image(image)),
+                ],
+              ),
+            ));
+          },
+        ),
+      );
+
+      await Future.delayed(Duration(milliseconds: 250));
+      index++;
+      _makePDF();
+    }
+  }
+
+  void _sharePDF() async {
+    try {
+      await Printing.sharePdf(
+        bytes: doc.save(),
+        filename: '${widget.code}.pdf',
+      );
+    } catch (e) {
+      logger.info(e.toString());
+    }
   }
 }
 
