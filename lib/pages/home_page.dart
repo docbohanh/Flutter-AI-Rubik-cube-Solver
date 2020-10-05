@@ -545,13 +545,9 @@ class _HomePage extends State<HomePage> {
           prefixText: side + ':  ',
           suffix: InkWell(
             onTap: () => Navigator.pop(context),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.clear,
-                size: 20,
-                color: Colors.redAccent[700],
-              ),
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: Colors.blue),
             ),
           ),
         ),

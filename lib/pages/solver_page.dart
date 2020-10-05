@@ -21,7 +21,7 @@ class _SolverPageState extends State<SolverPage> {
 
   bool isMakingPDF = false;
 
-  Widget rubikLoading({double size = 40}) {
+  Widget rubikLoading({double size = 24}) {
     return SizedBox(
       width: size,
       height: size,
@@ -39,7 +39,7 @@ class _SolverPageState extends State<SolverPage> {
           IconButton(
             onPressed: () => _makePDF(),
             icon: isMakingPDF
-                ? rubikLoading(size: 36)
+                ? rubikLoading()
                 : Icon(Icons.picture_as_pdf, color: Colors.white),
           )
         ],
@@ -64,15 +64,18 @@ class _SolverPageState extends State<SolverPage> {
                     delegate: ContestTabHeader(
                       child: Container(
                         color: Colors.white,
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Text(
-                            '${widget.code}',
-                            style: TextStyle(fontSize: 13),
+                        padding: EdgeInsets.only(left: 16, right: 16),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Center(
+                            child: Text(
+                              '${widget.code}',
+                              style: TextStyle(fontSize: 13),
+                            ),
                           ),
                         ),
                       ),
-                      height: 50,
+                      height: 30,
                     ),
                   ),
                 ];
@@ -144,9 +147,10 @@ class _SolverPageState extends State<SolverPage> {
                 child: Text(
                   "*2 - Turn two times",
                   style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.brown),
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.brown,
+                  ),
                 ),
               )),
           Text(
@@ -282,9 +286,7 @@ class _SolverPageState extends State<SolverPage> {
                       fontWeight: pw.FontWeight.bold,
                     ),
                   ),
-                  pw.SizedBox(
-                    height: 12,
-                  ),
+                  pw.SizedBox(height: 12),
                   pw.Container(width: 500, height: 500, child: pw.Image(image)),
                 ],
               ),
