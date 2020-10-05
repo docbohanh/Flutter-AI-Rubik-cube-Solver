@@ -52,7 +52,10 @@ class _HomePage extends State<HomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SolverPage(rotations: rotations),
+        builder: (context) => SolverPage(
+          rotations: rotations,
+          code: viewModel.kociembaCode,
+        ),
         fullscreenDialog: true,
       ),
     );
@@ -290,29 +293,31 @@ class _HomePage extends State<HomePage> {
       floatingActionButton: StreamBuilder(
         stream: viewModel.colorCodeStream,
         builder: (ctx, sn) {
-          return viewModel.isValid ? Container(
-            padding: EdgeInsets.only(bottom: 10),
-            height: 72,
-            width: 72,
-            child: FloatingActionButton(
-              tooltip: "Kociemba Rubik's Cube Solver",
+          return viewModel.isValid
+              ? Container(
+                  padding: EdgeInsets.only(bottom: 10),
+                  height: 72,
+                  width: 72,
+                  child: FloatingActionButton(
+                    tooltip: "Kociemba Rubik's Cube Solver",
 //          backgroundColor: Colors.indigo,
-              child: StreamBuilder<bool>(
-                stream: viewModel.solving.stream,
-                initialData: false,
-                builder: (ctx, snapshot) {
-                  if (snapshot.data) {
-                    return Container(
-                      height: 54,
-                      child: rubikLoading(),
-                    );
-                  }
-                  return Text("Solve", style: TextStyle(fontSize: 14));
-                },
-              ),
-              onPressed: _solveCube,
-            ),
-          ) : SizedBox();
+                    child: StreamBuilder<bool>(
+                      stream: viewModel.solving.stream,
+                      initialData: false,
+                      builder: (ctx, snapshot) {
+                        if (snapshot.data) {
+                          return Container(
+                            height: 54,
+                            child: rubikLoading(),
+                          );
+                        }
+                        return Text("Solve", style: TextStyle(fontSize: 14));
+                      },
+                    ),
+                    onPressed: _solveCube,
+                  ),
+                )
+              : SizedBox();
         },
       ),
     );
@@ -526,22 +531,18 @@ class _HomePage extends State<HomePage> {
           Navigator.pop(context);
         },
         decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(4)),
-            borderSide: BorderSide(
-              width: 1,
-              color: Colors.transparent,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(4)),
+              borderSide: BorderSide(
+                width: 1,
+                color: Colors.transparent,
+              ),
             ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(4)),
-            borderSide: BorderSide(width: 1, color: Colors.transparent),
-          ),
-          prefixText: side + ':  ',
-          suffix: FlatButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Cancel', style: TextStyle(color: Colors.blue)),
-          )
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(4)),
+              borderSide: BorderSide(width: 1, color: Colors.transparent),
+            ),
+            prefixText: side + ':  ',
         ),
       ),
     );
@@ -577,6 +578,20 @@ class _HomePage extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      onTap: () => Navigator.pop(context),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.clear,
+                          size: 20,
+                          color: Colors.redAccent[700],
+                        ),
+                      ),
+                    ),
+                  ),
                   Container(
                     padding: EdgeInsets.all(15),
                     child: Image.asset('assets/kociemba.png'),
