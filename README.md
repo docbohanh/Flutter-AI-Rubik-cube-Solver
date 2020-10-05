@@ -9,6 +9,7 @@ Mobile app for solving 3*3 Rubik's Cube.
   <img src="https://github.com/docbohanh/Flutter-AI-Rubik-cube-Solver/blob/master/screenshots/ss1.png?raw=true" width="200" >
   <img src="https://github.com/docbohanh/Flutter-AI-Rubik-cube-Solver/blob/master/screenshots/ss2.png?raw=true" width="200" >
   <img src="https://github.com/docbohanh/Flutter-AI-Rubik-cube-Solver/blob/master/screenshots/ss3.png?raw=true" width="200" >
+  <img src="https://github.com/docbohanh/Flutter-AI-Rubik-cube-Solver/blob/master/screenshots/ss4.png?raw=true" width="200" >
 </p>
 
 ## Python Libraries
