@@ -56,7 +56,14 @@ class HomeViewModel {
   }
 
   void resetAll() {
-    colorCodeChanged({});
+    colorCodeChanged({
+      "top": '',
+      "left": '',
+      "front": '',
+      "right": '',
+      "back": '',
+      "bottom": '',
+    });
   }
 
   void scramble() {
